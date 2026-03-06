@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saved Meals — Preper</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">PREPER</a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="breakfast.html" class="nav-link">Breakfast</a>
+    <a href="lunch.html" class="nav-link">Lunch</a>
+    <a href="dinner.html" class="nav-link">Dinner</a>
+    <a href="generator.html" class="nav-link">Generator</a>
+    <a href="shopping-list.html" class="nav-link">Shopping List</a>
+    <a href="saved.html" class="nav-link">Saved</a>
+  </div>
+  <button class="nav-diet-badge" id="dietBadge" onclick="openDietModal()">🌱 Set Diet</button>
+</nav>
+
+<main>
+  <div class="container">
+    <div class="page-header">
+      <div class="page-header-inner">
+        <div>
+          <p class="section-eyebrow">Your Favourites</p>
+          <h1 class="section-title">♥ Saved Meals</h1>
+          <p class="section-desc">Meals you've saved. Available at any time, even offline.</p>
+        </div>
+        <div style="margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; align-items:center">
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Scale to Days</label>
+            <select class="form-select" id="daysSelect" onchange="renderSaved()" style="width:120px">
+              <option value="1">1 day</option>
+              <option value="3">3 days</option>
+              <option value="4">4 days</option>
+              <option value="5" selected>5 days</option>
+              <option value="7">7 days</option>
+            </select>
+          </div>
+          <button class="btn btn-outline" onclick="clearAllSaved()">🗑️ Clear All</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="savedCount" style="font-size:13px; color:var(--text-2); margin-bottom:8px"></div>
+    <div class="recipe-grid stagger" id="savedGrid"></div>
+  </div>
+</main>
+
+<footer><strong>PREPER</strong> — By Praanav · Elite Meal Prep System</footer>
+
+<div class="modal-overlay" id="dietModal">
+  <div class="modal">
+    <h2 class="modal-title">Your Diet</h2>
+    <p class="modal-sub">Choose your dietary preference.</p>
+    <div class="diet-grid" id="dietGrid"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeDietModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmDiet()">Save</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+<script>
+(function() {
+
+const { RECIPES, DIETARY_PREFS, getSavedDiet, saveDiet, getSavedMeals, renderRecipeCard, toggleSave, Storage } = window.PreperApp;
+window.toggleSave = function(id, btn) {
+  // Override to re-render after unsave
+  const saved = window.PreperApp.getSavedMeals();
+  if (saved.includes(id)) {
+    window.PreperApp.removeSavedMeal(id);
+  } else {
+    window.PreperApp.saveNewMeal(id);
+  }
+  renderSaved();
+};
+
+let tempDiet = null;
+
+function renderSaved() {
+  const ids = getSavedMeals();
+  const days = parseInt(document.getElementById('daysSelect').value);
+  const grid = document.getElementById('savedGrid');
+  const count = document.getElementById('savedCount');
+
+  if (!ids.length) {
+    count.textContent = '';
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-state-icon">💔</div>
+        <h2>No saved meals yet</h2>
+        <p>Browse breakfast, lunch, and dinner recipes and tap the ♡ Save button on any meal you love.</p>
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap">
+          <a href="breakfast.html" class="btn btn-primary">Browse Breakfasts</a>
+          <a href="lunch.html" class="btn btn-outline">Browse Lunches</a>
+          <a href="dinner.html" class="btn btn-outline">Browse Dinners</a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Find recipe objects
+  const all = [...RECIPES.breakfast, ...RECIPES.lunch, ...RECIPES.dinner];
+  const recipes = ids.map(id => all.find(r=>r.id===id)).filter(Boolean);
+
+  count.textContent = `${recipes.length} saved meal${recipes.length!==1?'s':''}`;
+  grid.innerHTML = recipes.map(r => renderRecipeCard(r, days, true)).join('');
+}
+
+function clearAllSaved() {
+  if (!confirm('Clear all saved meals?')) return;
+  Storage.set('preper_saved_meals', []);
+  renderSaved();
+  showToast('Cleared all saved meals', '');
+}
+
+function updateDietBadge() {
+  const diet = getSavedDiet();
+  const badge = document.getElementById('dietBadge');
+  if (diet && DIETARY_PREFS[diet]) badge.textContent = `${DIETARY_PREFS[diet].icon} ${DIETARY_PREFS[diet].label}`;
+}
+function openDietModal() {
+  tempDiet = getSavedDiet();
+  const descriptions = { vegan:"No animal products", jain:"No meat, eggs, or root veg", hindu_veg:"Dairy ok, no meat/eggs/fish", hindu_nonveg:"No beef or pork", non_veg:"All meats, no restrictions", halal:"Halal meats, no pork/alcohol" };
+  document.getElementById('dietGrid').innerHTML = Object.entries(DIETARY_PREFS).map(([k,p]) => `
+    <div class="diet-card ${tempDiet===k?'selected':''}" onclick="selectDiet('${k}',this)">
+      <div class="diet-card-icon">${p.icon}</div><div class="diet-card-name">${p.label}</div>
+      <div class="diet-card-desc">${descriptions[k]}</div>
+    </div>`).join('');
+  document.getElementById('dietModal').classList.add('open');
+}
+function closeDietModal() { document.getElementById('dietModal').classList.remove('open'); }
+function selectDiet(k, el) { tempDiet=k; document.querySelectorAll('.diet-card').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); }
+function confirmDiet() {
+  if (!tempDiet) return;
+  saveDiet(tempDiet); updateDietBadge(); closeDietModal();
+  showToast(`✓ ${DIETARY_PREFS[tempDiet].label} mode active`, 'success');
+}
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.className=`toast ${type} show`;
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateDietBadge(); renderSaved();
+  document.getElementById('dietModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeDietModal(); });
+});
+
+})();
+</script>
+</body>
+</html>

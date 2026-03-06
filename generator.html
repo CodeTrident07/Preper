@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekly Generator — Preper</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">PREPER</a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="breakfast.html" class="nav-link">Breakfast</a>
+    <a href="lunch.html" class="nav-link">Lunch</a>
+    <a href="dinner.html" class="nav-link">Dinner</a>
+    <a href="generator.html" class="nav-link">Generator</a>
+    <a href="shopping-list.html" class="nav-link">Shopping List</a>
+    <a href="saved.html" class="nav-link">Saved</a>
+  </div>
+  <button class="nav-diet-badge" id="dietBadge" onclick="openDietModal()">🌱 Set Diet</button>
+</nav>
+
+<div class="diet-banner" id="diet-banner">
+  <span>👋 Set your dietary preference first for accurate plan generation →</span>
+  <a href="#" onclick="openDietModal(); return false;">Set Preference</a>
+  <button class="diet-banner-close" onclick="this.parentElement.style.display='none'">×</button>
+</div>
+
+<main>
+  <div class="container">
+    <div class="page-header">
+      <p class="section-eyebrow">Weekly Meal Generator</p>
+      <h1 class="section-title">⚡ Generate Your Plan</h1>
+      <p class="section-desc">Set your preferences, hit generate, and get a full meal prep plan with shopping list and cooking workflow.</p>
+    </div>
+
+    <div class="generator-layout">
+
+      <!-- ─── SIDEBAR ─────────────────────────────────────────── -->
+      <aside class="generator-sidebar">
+
+        <!-- Prep Days -->
+        <div class="gen-card">
+          <div class="gen-card-title">Prep Days</div>
+          <div class="day-selector">
+            <button class="day-btn" onclick="setDays(3,this)">3 days</button>
+            <button class="day-btn active" onclick="setDays(5,this)">5 days</button>
+            <button class="day-btn" onclick="setDays(4,this)">4 days</button>
+            <button class="day-btn" onclick="setDays(7,this)">7 days</button>
+          </div>
+        </div>
+
+        <!-- Macro Calculator -->
+        <div class="gen-card">
+          <div class="gen-card-title">Macro Calculator</div>
+          <div class="form-group">
+            <label class="form-label">Body Weight</label>
+            <input type="number" class="form-input" id="bodyWeight" placeholder="e.g. 75 kg" min="30" max="300" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Training Intensity</label>
+            <select class="form-select" id="intensity">
+              <option value="low">Low (1–2 days/week)</option>
+              <option value="moderate" selected>Moderate (3–4 days/week)</option>
+              <option value="high">High (5–6 days/week)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Goal</label>
+            <select class="form-select" id="goal">
+              <option value="cut">Cut (Lose Fat)</option>
+              <option value="maintain" selected>Maintain</option>
+              <option value="bulk">Bulk (Gain Muscle)</option>
+            </select>
+          </div>
+          <button class="btn btn-outline" style="width:100%" onclick="calcMacros()">Calculate Macros</button>
+        </div>
+
+        <!-- Macro Targets (editable) -->
+        <div class="gen-card" id="macroCard">
+          <div class="gen-card-title">Daily Targets <span style="font-size:10px; color:var(--text-3)">— Click to edit</span></div>
+          <div class="macro-display">
+            <div class="macro-item cal macro-editable" onclick="editMacro('calories')">
+              <div class="macro-item-value" id="dispCalories">—</div>
+              <div class="macro-item-label">Calories</div>
+              <div class="edit-hint">kcal / day</div>
+            </div>
+            <div class="macro-item pro macro-editable" onclick="editMacro('protein')">
+              <div class="macro-item-value" id="dispProtein">—</div>
+              <div class="macro-item-label">Protein</div>
+              <div class="edit-hint">grams / day</div>
+            </div>
+            <div class="macro-item car macro-editable" onclick="editMacro('carbs')">
+              <div class="macro-item-value" id="dispCarbs">—</div>
+              <div class="macro-item-label">Carbs</div>
+              <div class="edit-hint">grams / day</div>
+            </div>
+            <div class="macro-item fat-v macro-editable" onclick="editMacro('fat')">
+              <div class="macro-item-value" id="dispFat">—</div>
+              <div class="macro-item-label">Fat</div>
+              <div class="edit-hint">grams / day</div>
+            </div>
+          </div>
+          <p style="font-size:11px; color:var(--text-3); margin-top:12px; text-align:center">
+            💡 Click any value to override it manually
+          </p>
+        </div>
+
+        <!-- Generate Button -->
+        <button class="btn btn-primary btn-lg" style="width:100%" onclick="generatePlan()">
+          ⚡ Generate My Plan
+        </button>
+
+        <button class="btn btn-outline" style="width:100%" onclick="savePlanToStorage()" id="savePlanBtn" disabled>
+          💾 Save Plan
+        </button>
+
+      </aside>
+
+      <!-- ─── MAIN PLAN AREA ────────────────────────────────────── -->
+      <div id="planArea">
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:400px; text-align:center; gap:20px; color:var(--text-2)">
+          <div style="font-size:80px">⚡</div>
+          <h2 style="font-size:28px; color:var(--text)">Ready to Generate</h2>
+          <p style="max-width:400px; font-size:15px">Set your diet preference, pick your prep days, optionally calculate your macros, then hit Generate.</p>
+          <p style="font-size:13px; color:var(--text-3)">Don't forget to set your diet from the badge in the nav!</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer><strong>PREPER</strong> — By Praanav · Elite Meal Prep System</footer>
+
+<!-- Diet Modal -->
+<div class="modal-overlay" id="dietModal">
+  <div class="modal">
+    <h2 class="modal-title">Your Diet</h2>
+    <p class="modal-sub">Choose your dietary preference to filter recipes.</p>
+    <div class="diet-grid" id="dietGrid"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeDietModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmDiet()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Macro Edit Modal -->
+<div class="modal-overlay" id="macroEditModal">
+  <div class="modal" style="max-width:360px">
+    <h2 class="modal-title" id="macroEditTitle">Edit</h2>
+    <p class="modal-sub" id="macroEditSub">Enter your target</p>
+    <div class="form-group">
+      <label class="form-label" id="macroEditLabel">Value</label>
+      <input type="number" class="form-input" id="macroEditInput" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeMacroEdit()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMacroEdit()">Update</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+<script>
+(function() {
+
+const {
+  RECIPES, DIETARY_PREFS, calculateMacros, getRandomRecipe,
+  scaleIngredients, buildShoppingList, buildWorkflow,
+  getSavedDiet, saveDiet, getSavedMacros, saveMacros,
+  getSavedPlan, savePlan: saveStoragePlan, renderRecipeCard, toggleSave, Storage
+} = window.PreperApp;
+window.toggleSave = toggleSave;
+
+let prepDays = 5;
+let currentMacros = { calories: null, protein: null, carbs: null, fat: null };
+let currentPlan = null;
+let tempDiet = null;
+let editingMacro = null;
+
+// ─── PREP DAYS ────────────────────────────────────────────────
+function setDays(n, el) {
+  prepDays = n;
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─── MACRO CALC ───────────────────────────────────────────────
+function calcMacros() {
+  const w = parseFloat(document.getElementById('bodyWeight').value);
+  if (!w || w < 30) { showToast('Enter a valid body weight', 'error'); return; }
+  const intensity = document.getElementById('intensity').value;
+  const goal = document.getElementById('goal').value;
+  const m = calculateMacros(w, intensity, goal);
+  currentMacros = m;
+  updateMacroDisplay();
+  showToast('✓ Macros calculated!', 'success');
+}
+
+function updateMacroDisplay() {
+  ['calories','protein','carbs','fat'].forEach(k => {
+    const el = document.getElementById('disp' + k.charAt(0).toUpperCase() + k.slice(1));
+    if (el) el.textContent = currentMacros[k] ?? '—';
+  });
+}
+
+// ─── MACRO EDIT ───────────────────────────────────────────────
+function editMacro(key) {
+  editingMacro = key;
+  const labels = { calories: 'Daily Calories (kcal)', protein: 'Daily Protein (g)', carbs: 'Daily Carbs (g)', fat: 'Daily Fat (g)' };
+  document.getElementById('macroEditTitle').textContent = `Edit ${key.charAt(0).toUpperCase() + key.slice(1)}`;
+  document.getElementById('macroEditSub').textContent = `Override your calculated ${key} target`;
+  document.getElementById('macroEditLabel').textContent = labels[key];
+  document.getElementById('macroEditInput').value = currentMacros[key] ?? '';
+  document.getElementById('macroEditModal').classList.add('open');
+}
+function closeMacroEdit() { document.getElementById('macroEditModal').classList.remove('open'); }
+function saveMacroEdit() {
+  const val = parseFloat(document.getElementById('macroEditInput').value);
+  if (isNaN(val) || val <= 0) { showToast('Enter a valid value', 'error'); return; }
+  currentMacros[editingMacro] = Math.round(val);
+  updateMacroDisplay(); closeMacroEdit();
+  showToast(`✓ ${editingMacro} updated to ${Math.round(val)}`, 'success');
+}
+
+// ─── GENERATE PLAN ────────────────────────────────────────────
+function generatePlan() {
+  const diet = getSavedDiet();
+  if (!diet) { openDietModal(); showToast('Set your diet first!', 'error'); return; }
+
+  const breakfast = getRandomRecipe('breakfast', diet);
+  const lunch = getRandomRecipe('lunch', diet);
+  const dinner = getRandomRecipe('dinner', diet);
+
+  if (!breakfast && !lunch && !dinner) {
+    showToast('No recipes found for your diet. Try a different one.', 'error'); return;
+  }
+
+  currentPlan = { breakfast, lunch, dinner, diet, days: prepDays, macros: { ...currentMacros } };
+  renderPlan(currentPlan);
+  document.getElementById('savePlanBtn').disabled = false;
+  showToast('✓ Plan generated!', 'success');
+}
+
+function renderPlan(plan) {
+  const { breakfast, lunch, dinner, days, macros } = plan;
+  const recipes = [breakfast, lunch, dinner].filter(Boolean);
+  const shopping = buildShoppingList(recipes, days);
+  const workflow = buildWorkflow(recipes);
+
+  // Totals
+  const totalProt = recipes.reduce((s,r)=>s+r.protein,0);
+  const totalCal = recipes.reduce((s,r)=>s+r.calories,0);
+  const totalPrep = recipes.reduce((s,r)=>s+r.prepTime,0);
+  const totalCook = recipes.reduce((s,r)=>s+r.cookTime,0);
+
+  const macroCompare = (macros.calories && macros.protein) ? `
+    <div class="gen-card" style="background:var(--bg-3); border-color:var(--border); margin-bottom:24px">
+      <div class="gen-card-title">📊 Macro Comparison</div>
+      <div style="font-size:13px; color:var(--text-2); display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; text-align:center">
+        <div><div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Metric</div></div>
+        <div><div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; color:var(--accent)">Your Target</div></div>
+        <div><div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; color:var(--accent-3)">This Plan</div></div>
+
+        <div>Calories</div><div style="color:var(--text)">${macros.calories}</div><div style="color:var(--accent-3)">${totalCal}</div>
+        <div>Protein</div><div style="color:var(--text)">${macros.protein}g</div><div style="color:var(--protein-color)">${totalProt}g</div>
+      </div>
+    </div>` : '';
+
+  document.getElementById('planArea').innerHTML = `
+    <div class="plan-display fade-in">
+
+      <!-- Summary Bar -->
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px;">
+        ${[
+          ['Total Protein', totalProt + 'g', 'var(--protein-color)'],
+          ['Total Calories', totalCal, 'var(--accent)'],
+          ['Prep Days', days, 'var(--accent-3)'],
+          ['Prep Time', (totalPrep+totalCook)+'m', 'var(--carbs-color)'],
+        ].map(([l,v,c])=>`
+          <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px; text-align:center">
+            <div style="font-family:var(--font-display); font-size:32px; letter-spacing:2px; color:${c}">${v}</div>
+            <div style="font-size:11px; color:var(--text-2); margin-top:4px; text-transform:uppercase; letter-spacing:1px">${l}</div>
+          </div>`).join('')}
+      </div>
+
+      ${macroCompare}
+
+      <!-- Selected Meals -->
+      <h2 style="font-family:var(--font-display); font-size:32px; letter-spacing:2px; margin-bottom:16px">Selected Meals</h2>
+
+      ${breakfast ? `
+        <div class="plan-meal-section" style="margin-bottom:16px">
+          <div class="plan-meal-header">
+            <span class="plan-meal-type">🌅 Breakfast</span>
+            <button class="btn btn-ghost btn-sm" onclick="rerollMeal('breakfast')">🎲 Reroll</button>
+            <span class="plan-meal-name">${breakfast.name}</span>
+          </div>
+          <div style="padding:20px">${renderRecipeCard(breakfast, days, true)}</div>
+        </div>` : ''}
+
+      ${lunch ? `
+        <div class="plan-meal-section" style="margin-bottom:16px">
+          <div class="plan-meal-header">
+            <span class="plan-meal-type">☀️ Lunch</span>
+            <button class="btn btn-ghost btn-sm" onclick="rerollMeal('lunch')">🎲 Reroll</button>
+            <span class="plan-meal-name">${lunch.name}</span>
+          </div>
+          <div style="padding:20px">${renderRecipeCard(lunch, days, true)}</div>
+        </div>` : ''}
+
+      ${dinner ? `
+        <div class="plan-meal-section" style="margin-bottom:16px">
+          <div class="plan-meal-header">
+            <span class="plan-meal-type">🌙 Dinner</span>
+            <button class="btn btn-ghost btn-sm" onclick="rerollMeal('dinner')">🎲 Reroll</button>
+            <span class="plan-meal-name">${dinner.name}</span>
+          </div>
+          <div style="padding:20px">${renderRecipeCard(dinner, days, true)}</div>
+        </div>` : ''}
+
+      <!-- Batch Workflow -->
+      <h2 style="font-family:var(--font-display); font-size:32px; letter-spacing:2px; margin:32px 0 16px">Batch Cooking Workflow</h2>
+      <div class="gen-card">
+        <div class="workflow-steps">
+          ${workflow.map((s,i) => `
+            <div class="workflow-step">
+              <div class="workflow-step-num">${i+1}</div>
+              <div class="workflow-step-text">${s}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Shopping Preview -->
+      <div style="display:flex; align-items:center; gap:16px; margin:32px 0 16px">
+        <h2 style="font-family:var(--font-display); font-size:32px; letter-spacing:2px">Shopping Preview</h2>
+        <a href="shopping-list.html" class="btn btn-outline btn-sm">Full List →</a>
+      </div>
+      <div class="gen-card">
+        ${Object.entries(shopping).map(([cat, items]) => {
+          const itemArr = Object.values(items);
+          if (!itemArr.length) return '';
+          return `<div style="margin-bottom:20px">
+            <div style="font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-bottom:12px; font-family:var(--font-mono)">${cat}</div>
+            ${itemArr.slice(0,5).map(i=>`<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px">
+              <span>${i.name}</span>
+              <span style="color:var(--accent); font-family:var(--font-mono); font-weight:600">${i.qty}${i.unit && i.unit!=='pcs'?i.unit:''}</span>
+            </div>`).join('')}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+// ─── REROLL SINGLE MEAL ───────────────────────────────────────
+function rerollMeal(category) {
+  const diet = getSavedDiet();
+  let newRecipe = getRandomRecipe(category, diet);
+  let tries = 0;
+  while (newRecipe && newRecipe.id === currentPlan[category]?.id && tries < 10) {
+    newRecipe = getRandomRecipe(category, diet); tries++;
+  }
+  currentPlan[category] = newRecipe;
+  renderPlan(currentPlan);
+  showToast(`↻ ${category} rerolled!`, 'success');
+}
+
+// ─── SAVE PLAN ────────────────────────────────────────────────
+function savePlanToStorage() {
+  if (!currentPlan) return;
+  saveStoragePlan(currentPlan);
+  showToast('✓ Plan saved!', 'success');
+}
+
+// ─── DIET MODAL ───────────────────────────────────────────────
+function updateDietBadge() {
+  const diet = getSavedDiet();
+  const badge = document.getElementById('dietBadge');
+  if (diet && DIETARY_PREFS[diet]) badge.textContent = `${DIETARY_PREFS[diet].icon} ${DIETARY_PREFS[diet].label}`;
+}
+function openDietModal() {
+  tempDiet = getSavedDiet();
+  const descriptions = { vegan:"No animal products", jain:"No meat, eggs, or root veg", hindu_veg:"Dairy ok, no meat/eggs/fish", hindu_nonveg:"No beef or pork", non_veg:"All meats, no restrictions", halal:"Halal meats, no pork/alcohol" };
+  document.getElementById('dietGrid').innerHTML = Object.entries(DIETARY_PREFS).map(([k,p]) => `
+    <div class="diet-card ${tempDiet===k?'selected':''}" onclick="selectDiet('${k}',this)">
+      <div class="diet-card-icon">${p.icon}</div><div class="diet-card-name">${p.label}</div>
+      <div class="diet-card-desc">${descriptions[k]}</div>
+    </div>`).join('');
+  document.getElementById('dietModal').classList.add('open');
+}
+function closeDietModal() { document.getElementById('dietModal').classList.remove('open'); }
+function selectDiet(k, el) { tempDiet=k; document.querySelectorAll('.diet-card').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); }
+function confirmDiet() {
+  if (!tempDiet) return;
+  saveDiet(tempDiet); updateDietBadge(); closeDietModal();
+  document.getElementById('diet-banner').style.display='none';
+  showToast(`✓ ${DIETARY_PREFS[tempDiet].label} mode active`, 'success');
+}
+
+// ─── TOAST ────────────────────────────────────────────────────
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.className=`toast ${type} show`;
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  updateDietBadge();
+
+  // Restore saved macros
+  const saved = getSavedMacros();
+  if (saved) { currentMacros = saved; updateMacroDisplay(); }
+
+  // Restore saved plan
+  const savedPlan = getSavedPlan();
+  if (savedPlan) {
+    currentPlan = savedPlan;
+    prepDays = savedPlan.days;
+    renderPlan(savedPlan);
+    document.getElementById('savePlanBtn').disabled = false;
+  }
+
+  ['dietModal','macroEditModal'].forEach(id => {
+    document.getElementById(id).addEventListener('click', e => {
+      if (e.target === e.currentTarget) {
+        if (id === 'dietModal') closeDietModal();
+        else closeMacroEdit();
+      }
+    });
+  });
+});
+
+})();
+</script>
+</body>
+</html>
