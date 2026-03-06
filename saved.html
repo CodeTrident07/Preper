@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saved Meals — Preper by Praanav</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <span class="brand-name">PREPER</span>
+      <span class="brand-sub">by Praanav</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="breakfast.html" class="nav-link">Breakfast</a>
+      <a href="lunch.html" class="nav-link">Lunch</a>
+      <a href="dinner.html" class="nav-link">Dinner</a>
+      <a href="generator.html" class="nav-link">Generator</a>
+      <a href="shopping-list.html" class="nav-link">Shopping List</a>
+      <a href="saved.html" class="nav-link active">Saved</a>
+      <a href="generator.html" class="nav-cta">Generate Plan →</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <p class="label">⭐ Your Favourites</p>
+    <h1 class="display-lg">SAVED MEALS</h1>
+    <p class="text-secondary">Your personal collection of favourite recipes. Star any meal across the app to save it here.</p>
+    <div class="flex gap-12 mt-24" style="flex-wrap:wrap;align-items:center">
+      <span class="label" style="color:var(--text-secondary)">Scale for:</span>
+      <div class="days-selector" id="daysSelector">
+        <button class="day-btn" data-days="3">3 days</button>
+        <button class="day-btn active" data-days="4">4 days</button>
+        <button class="day-btn" data-days="5">5 days</button>
+        <button class="day-btn" data-days="7">7 days</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Empty state -->
+    <div id="emptyState" class="empty-state" style="display:none">
+      <div class="empty-state-icon">⭐</div>
+      <h3>No Saved Meals Yet</h3>
+      <p>Browse recipes and tap the ☆ star button to save your favourites here.</p>
+      <div class="flex-center gap-12" style="flex-wrap:wrap">
+        <a href="breakfast.html" class="btn btn-outline">Browse Breakfast</a>
+        <a href="lunch.html" class="btn btn-outline">Browse Lunch</a>
+        <a href="dinner.html" class="btn btn-primary">Browse Dinner</a>
+      </div>
+    </div>
+
+    <!-- Saved meals -->
+    <div id="savedContent" style="display:none">
+      <!-- Breakfast -->
+      <div id="savedBreakfast" style="margin-bottom:48px">
+        <div class="flex-between mb-24">
+          <h2 class="display-sm">🌅 BREAKFAST</h2>
+          <span class="label text-muted" id="bfCount">0 saved</span>
+        </div>
+        <div class="grid-2" id="savedBreakfastGrid"></div>
+      </div>
+
+      <!-- Lunch -->
+      <div id="savedLunch" style="margin-bottom:48px">
+        <div class="flex-between mb-24">
+          <h2 class="display-sm">☀️ LUNCH</h2>
+          <span class="label text-muted" id="lunchCount">0 saved</span>
+        </div>
+        <div class="grid-2" id="savedLunchGrid"></div>
+      </div>
+
+      <!-- Dinner -->
+      <div id="savedDinner" style="margin-bottom:48px">
+        <div class="flex-between mb-24">
+          <h2 class="display-sm">🌙 DINNER</h2>
+          <span class="label text-muted" id="dinnerCount">0 saved</span>
+        </div>
+        <div class="grid-2" id="savedDinnerGrid"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Recipe Modal -->
+<div class="modal-overlay" id="recipeModal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-emoji">🍽️</div>
+        <div class="flex gap-8 mb-8" style="flex-wrap:wrap">
+          <div class="modal-tags flex gap-8" style="flex-wrap:wrap"></div>
+        </div>
+        <h2 class="display-sm modal-title">Recipe</h2>
+        <p class="text-secondary mt-8 modal-description" style="font-size:0.9rem"></p>
+        <p class="label mt-8 modal-serving-info" style="color:var(--accent)"></p>
+      </div>
+      <button class="modal-close" onclick="closeRecipeModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-macros"></div>
+      <div class="divider"></div>
+      <h3 style="font-family:var(--font-display);font-size:1rem;margin-bottom:16px;letter-spacing:0.06em;color:var(--text-secondary)">INGREDIENTS</h3>
+      <div class="ingredients-grid modal-ingredients"></div>
+      <div class="divider"></div>
+      <h3 style="font-family:var(--font-display);font-size:1rem;margin-bottom:16px;letter-spacing:0.06em;color:var(--text-secondary)">METHOD</h3>
+      <div class="steps-list modal-steps"></div>
+      <div class="divider"></div>
+      <h3 style="font-family:var(--font-display);font-size:1rem;margin-bottom:16px;letter-spacing:0.06em;color:var(--text-secondary)">STORAGE & REHEAT</h3>
+      <div class="steps-list modal-storage"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span class="toast-icon">⭐</span>
+  <span class="toast-message">Saved!</span>
+</div>
+
+<script src="app.js"></script>
+<script>
+  let selectedDays = 4;
+
+  function renderSaved() {
+    const savedIds = getSavedMeals();
+
+    if (savedIds.length === 0) {
+      document.getElementById('emptyState').style.display = 'block';
+      document.getElementById('savedContent').style.display = 'none';
+      return;
+    }
+
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('savedContent').style.display = 'block';
+
+    const saved = getAllRecipes().filter(r => savedIds.includes(r.id));
+    const breakfast = saved.filter(r => r.type === 'breakfast');
+    const lunch = saved.filter(r => r.type === 'lunch');
+    const dinner = saved.filter(r => r.type === 'dinner');
+
+    document.getElementById('bfCount').textContent = `${breakfast.length} saved`;
+    document.getElementById('lunchCount').textContent = `${lunch.length} saved`;
+    document.getElementById('dinnerCount').textContent = `${dinner.length} saved`;
+
+    document.getElementById('savedBreakfast').style.display = breakfast.length ? 'block' : 'none';
+    document.getElementById('savedLunch').style.display = lunch.length ? 'block' : 'none';
+    document.getElementById('savedDinner').style.display = dinner.length ? 'block' : 'none';
+
+    document.getElementById('savedBreakfastGrid').innerHTML = breakfast.map(r => renderRecipeCard(r, selectedDays)).join('');
+    document.getElementById('savedLunchGrid').innerHTML = lunch.map(r => renderRecipeCard(r, selectedDays)).join('');
+    document.getElementById('savedDinnerGrid').innerHTML = dinner.map(r => renderRecipeCard(r, selectedDays)).join('');
+  }
+
+  document.querySelectorAll('.day-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedDays = parseInt(btn.dataset.days);
+      renderSaved();
+    });
+  });
+
+  // Re-render when save state changes (via delegation in app.js)
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.save-btn')) {
+      setTimeout(renderSaved, 100);
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => { renderSaved(); });
+</script>
+</body>
+</html>

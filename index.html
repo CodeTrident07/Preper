@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preper — Elite Meal Prep for Athletes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── Navigation ───────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <span class="brand-name">PREPER</span>
+      <span class="brand-sub">by Praanav</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="breakfast.html" class="nav-link">Breakfast</a>
+      <a href="lunch.html" class="nav-link">Lunch</a>
+      <a href="dinner.html" class="nav-link">Dinner</a>
+      <a href="generator.html" class="nav-link">Generator</a>
+      <a href="shopping-list.html" class="nav-link">Shopping List</a>
+      <a href="saved.html" class="nav-link">Saved</a>
+      <a href="generator.html" class="nav-cta">Generate Plan →</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="container hero-content">
+    <div class="hero-eyebrow fade-in">
+      <div class="hero-eyebrow-dot"></div>
+      <span class="label" style="color:var(--text-secondary)">Elite Meal Prep System</span>
+    </div>
+    <h1 class="hero-title display-xl fade-in-1">
+      EAT LIKE AN<br><span class="accent">ATHLETE.</span><br>PREP LIKE A PRO.
+    </h1>
+    <p class="hero-sub fade-in-2">
+      Restaurant-quality, high-protein meals designed for batch cooking. One free day. 
+      Five days of elite fuel. Zero compromise on taste.
+    </p>
+    <div class="hero-actions fade-in-3">
+      <a href="generator.html" class="btn btn-primary btn-lg">
+        ⚡ Generate My Weekly Plan
+      </a>
+      <a href="breakfast.html" class="btn btn-outline btn-lg">
+        Browse Recipes
+      </a>
+    </div>
+    <div class="hero-stats fade-in-4">
+      <div>
+        <div class="hero-stat-value">12</div>
+        <div class="hero-stat-label">Curated Recipes</div>
+      </div>
+      <div>
+        <div class="hero-stat-value">50g+</div>
+        <div class="hero-stat-label">Avg Daily Protein</div>
+      </div>
+      <div>
+        <div class="hero-stat-value">2hrs</div>
+        <div class="hero-stat-label">One Prep Session</div>
+      </div>
+      <div>
+        <div class="hero-stat-value">5 days</div>
+        <div class="hero-stat-label">Meals Ready</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How It Works ──────────────────────────────────────────── -->
+<section class="section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="section-header text-center" style="max-width:600px;margin:0 auto 48px">
+      <p class="label">The System</p>
+      <h2 class="display-md">THREE STEPS TO ELITE NUTRITION</h2>
+      <p>Stop cooking every day. Spend one session, eat well all week.</p>
+    </div>
+    <div class="grid-3">
+      <div class="feature-card fade-in-1">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title">01 — SET YOUR TARGETS</div>
+        <p class="feature-desc">Input your weight, training load, and goal. Preper calculates your exact calorie and macro targets. Whether you're cutting, maintaining, or building, meals scale to your needs.</p>
+      </div>
+      <div class="feature-card fade-in-2">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">02 — GENERATE YOUR PLAN</div>
+        <p class="feature-desc">One click generates a full week of breakfast, lunch, and dinner. Ingredients are automatically scaled to your selected prep days. A step-by-step batch cooking workflow handles the rest.</p>
+      </div>
+      <div class="feature-card fade-in-3">
+        <div class="feature-icon">🛒</div>
+        <div class="feature-title">03 — SHOP & PREP</div>
+        <p class="feature-desc">Your entire grocery list is generated automatically, categorised by section. Head to the store, get everything in one go, then execute the batch cooking workflow in a single session.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Meal Categories ───────────────────────────────────────── -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <p class="label">The Menu</p>
+      <h2 class="display-md">NOT YOUR AVERAGE<br><span class="text-accent">MEAL PREP FOOD</span></h2>
+      <p>Every recipe is designed for maximum flavour, not just macros. Real food. Real taste. Batch cooked.</p>
+    </div>
+
+    <div class="grid-3">
+      <!-- Breakfast Card -->
+      <a href="breakfast.html" class="card" style="text-decoration:none;display:block">
+        <div class="card-image" style="background:linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);aspect-ratio:16/9">
+          <div class="card-image-placeholder" style="flex-direction:column;gap:8px">
+            <span style="font-size:2.8rem">🌅</span>
+            <span class="label" style="color:var(--blue)">4 Recipes</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">BREAKFAST</div>
+          <p class="text-secondary mt-8" style="font-size:0.86rem">Korean egg bowls, overnight oats, breakfast wraps, and protein pancake stacks.</p>
+          <div class="flex gap-8 mt-16" style="flex-wrap:wrap">
+            <span class="card-tag accent">High Protein</span>
+            <span class="card-tag time">10–20 min cook</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Lunch Card -->
+      <a href="lunch.html" class="card" style="text-decoration:none;display:block">
+        <div class="card-image" style="background:linear-gradient(135deg, #1a2000 0%, #2a3500 50%, #3a4a00 100%);aspect-ratio:16/9">
+          <div class="card-image-placeholder" style="flex-direction:column;gap:8px">
+            <span style="font-size:2.8rem">☀️</span>
+            <span class="label" style="color:var(--accent)">4 Recipes</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">LUNCH</div>
+          <p class="text-secondary mt-8" style="font-size:0.86rem">Korean beef bowls, burrito bowls, Mediterranean wraps, and protein pasta.</p>
+          <div class="flex gap-8 mt-16" style="flex-wrap:wrap">
+            <span class="card-tag accent">50g+ Protein</span>
+            <span class="card-tag time">25–35 min</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Dinner Card -->
+      <a href="dinner.html" class="card" style="text-decoration:none;display:block">
+        <div class="card-image" style="background:linear-gradient(135deg, #1a0a00 0%, #2a1200 50%, #3a1800 100%);aspect-ratio:16/9">
+          <div class="card-image-placeholder" style="flex-direction:column;gap:8px">
+            <span style="font-size:2.8rem">🌙</span>
+            <span class="label" style="color:var(--orange)">4 Recipes</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">DINNER</div>
+          <p class="text-secondary mt-8" style="font-size:0.86rem">Teriyaki salmon, steak & potatoes, garlic chicken quinoa, and high-protein stir fry.</p>
+          <div class="flex gap-8 mt-16" style="flex-wrap:wrap">
+            <span class="card-tag accent">Premium Meals</span>
+            <span class="card-tag time">30–40 min</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Macro Calculator Preview ──────────────────────────────── -->
+<section class="section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center">
+      <div>
+        <p class="label" style="margin-bottom:16px">Athlete Macro Calculator</p>
+        <h2 class="display-md" style="margin-bottom:20px">KNOW YOUR<br><span class="text-accent">EXACT TARGETS</span></h2>
+        <p class="text-secondary" style="margin-bottom:28px;line-height:1.7">Input your stats and get precision macro targets calibrated to your training intensity and body composition goal. Then let Preper handle the food.</p>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px">
+          <div class="flex gap-12 align-items-center">
+            <span style="color:var(--accent);font-size:1.1rem">✓</span>
+            <span class="text-secondary" style="font-size:0.9rem">Protein calculated at 2.2g per kg bodyweight</span>
+          </div>
+          <div class="flex gap-12">
+            <span style="color:var(--accent);font-size:1.1rem">✓</span>
+            <span class="text-secondary" style="font-size:0.9rem">Calories adjusted for cut / maintain / bulk</span>
+          </div>
+          <div class="flex gap-12">
+            <span style="color:var(--accent);font-size:1.1rem">✓</span>
+            <span class="text-secondary" style="font-size:0.9rem">Training load factored into TDEE calculation</span>
+          </div>
+        </div>
+        <a href="generator.html#macros" class="btn btn-primary">Calculate My Macros →</a>
+      </div>
+      <div class="macro-calc">
+        <p class="label" style="margin-bottom:20px">Quick Estimate</p>
+        <form id="macroCalcForm">
+          <div class="form-group">
+            <label class="form-label" for="bodyWeight">Body Weight (kg)</label>
+            <input type="number" id="bodyWeight" class="form-input" placeholder="e.g. 80" min="40" max="200" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="trainingIntensity">Training Intensity</label>
+            <select id="trainingIntensity" class="form-select">
+              <option value="light">Light (1–3x per week)</option>
+              <option value="moderate" selected>Moderate (3–5x per week)</option>
+              <option value="heavy">Heavy (5–7x per week)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fitnessGoal">Goal</label>
+            <select id="fitnessGoal" class="form-select">
+              <option value="cut">Cut (fat loss)</option>
+              <option value="maintain" selected>Maintain</option>
+              <option value="bulk">Bulk (muscle gain)</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Calculate →</button>
+        </form>
+        <div id="macroResults" class="results-box hidden" style="margin-top:20px">
+          <p class="label" style="margin-bottom:12px">Your Daily Targets</p>
+          <div class="results-grid">
+            <div class="result-item"><div class="result-value" id="r-calories">—</div><div class="result-label">Calories</div></div>
+            <div class="result-item"><div class="result-value" id="r-protein">—</div><div class="result-label">Protein</div></div>
+            <div class="result-item"><div class="result-value" id="r-carbs">—</div><div class="result-label">Carbs</div></div>
+            <div class="result-item"><div class="result-value" id="r-fat">—</div><div class="result-label">Fat</div></div>
+          </div>
+          <div style="margin-top:16px">
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-muted);margin-bottom:6px">
+              <span>Protein</span><span id="prog-protein-label"></span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="prog-protein" style="background:var(--red);width:0"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-muted);margin:8px 0 6px">
+              <span>Carbs</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="prog-carbs" style="background:var(--blue);width:0"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-muted);margin:8px 0 6px">
+              <span>Fat</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="prog-fat" style="background:var(--orange);width:0"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA Banner ────────────────────────────────────────────── -->
+<section class="section">
+  <div class="container">
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:64px 48px;text-align:center;position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%, rgba(232,255,71,0.06) 0%, transparent 70%);pointer-events:none"></div>
+      <p class="label" style="margin-bottom:16px">Ready to Start?</p>
+      <h2 class="display-md" style="margin-bottom:20px">ONE PREP SESSION.<br><span class="text-accent">FIVE DAYS OF ELITE FOOD.</span></h2>
+      <p class="text-secondary" style="max-width:480px;margin:0 auto 36px;line-height:1.7">Stop deciding what to eat every day. Generate your plan, shop once, cook once, and eat well all week.</p>
+      <div class="flex-center gap-16" style="flex-wrap:wrap">
+        <a href="generator.html" class="btn btn-primary btn-lg">⚡ Generate My Plan</a>
+        <a href="shopping-list.html" class="btn btn-outline btn-lg">🛒 View Shopping List</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer style="border-top:1px solid var(--border);padding:40px 0">
+  <div class="container flex-between" style="flex-wrap:wrap;gap:16px">
+    <div>
+      <div style="font-family:var(--font-display);font-size:1.3rem;letter-spacing:0.08em;color:var(--accent)">PREPER</div>
+      <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;color:var(--text-muted);margin-top:4px">BY PRAANAV · ELITE MEAL PREP</div>
+    </div>
+    <div class="flex gap-24" style="flex-wrap:wrap">
+      <a href="breakfast.html" class="text-muted" style="font-size:0.85rem;transition:color 0.2s" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">Breakfast</a>
+      <a href="lunch.html" class="text-muted" style="font-size:0.85rem;transition:color 0.2s" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">Lunch</a>
+      <a href="dinner.html" class="text-muted" style="font-size:0.85rem;transition:color 0.2s" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">Dinner</a>
+      <a href="generator.html" class="text-muted" style="font-size:0.85rem;transition:color 0.2s" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">Generator</a>
+      <a href="saved.html" class="text-muted" style="font-size:0.85rem;transition:color 0.2s" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">Saved Meals</a>
+    </div>
+    <div class="text-muted" style="font-size:0.78rem">© 2025 Preper by Praanav</div>
+  </div>
+</footer>
+
+<!-- ── Recipe Modal ──────────────────────────────────────────── -->
+<div class="modal-overlay" id="recipeModal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-emoji">🍽️</div>
+        <div class="flex gap-8 mb-8" style="flex-wrap:wrap" id="modal-tags-container">
+          <div class="modal-tags flex gap-8" style="flex-wrap:wrap"></div>
+        </div>
+        <h2 class="display-sm modal-title">Recipe</h2>
+        <p class="text-secondary mt-8 modal-description" style="font-size:0.9rem"></p>
+        <p class="label mt-8 modal-serving-info" style="color:var(--accent)"></p>
+      </div>
+      <button class="modal-close" onclick="closeRecipeModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-macros"></div>
+      <div class="divider"></div>
+      <h3 class="display-sm" style="font-size:1rem;margin-bottom:16px;letter-spacing:0.06em;color:var(--text-secondary)">INGREDIENTS</h3>
+      <div class="ingredients-grid modal-ingredients"></div>
+      <div class="divider"></div>
+      <h3 class="display-sm" style="font-size:1rem;margin-bottom:16px;letter-spacing:0.06em;color:var(--text-secondary)">METHOD</h3>
+      <div class="steps-list modal-steps"></div>
+      <div class="divider"></div>
+      <h3 class="display-sm" style="font-size:1rem;margin-bottom:16px;letter-spacing:0.06em;color:var(--text-secondary)">STORAGE & REHEAT</h3>
+      <div class="steps-list modal-storage"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast ─────────────────────────────────────────────────── -->
+<div class="toast" id="toast">
+  <span class="toast-icon">⭐</span>
+  <span class="toast-message">Saved!</span>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

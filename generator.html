@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekly Generator — Preper by Praanav</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <span class="brand-name">PREPER</span>
+      <span class="brand-sub">by Praanav</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="breakfast.html" class="nav-link">Breakfast</a>
+      <a href="lunch.html" class="nav-link">Lunch</a>
+      <a href="dinner.html" class="nav-link">Dinner</a>
+      <a href="generator.html" class="nav-link active">Generator</a>
+      <a href="shopping-list.html" class="nav-link">Shopping List</a>
+      <a href="saved.html" class="nav-link">Saved</a>
+      <a href="generator.html" class="nav-cta">Generate Plan →</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Generator Hero -->
+<div class="generator-hero">
+  <div class="container">
+    <p class="label" style="margin-bottom:16px">Weekly Meal Generator</p>
+    <h1 class="display-lg" style="margin-bottom:16px">
+      ONE CLICK.<br><span class="text-accent">YOUR ENTIRE WEEK.</span>
+    </h1>
+    <p class="text-secondary" style="max-width:480px;margin:0 auto 32px;font-size:1rem">
+      Select how many days you want to prep for, then generate a complete meal plan with scaled recipes, batch cooking workflow, and shopping list.
+    </p>
+
+    <!-- Days selector -->
+    <div class="flex-center gap-8 mb-32" style="flex-wrap:wrap">
+      <span class="label" style="color:var(--text-secondary);margin-right:8px">PREP FOR:</span>
+      <div class="days-selector" id="daysSelector">
+        <button class="day-btn" data-days="3">3 days</button>
+        <button class="day-btn active" data-days="4">4 days</button>
+        <button class="day-btn" data-days="5">5 days</button>
+        <button class="day-btn" data-days="7">7 days</button>
+      </div>
+    </div>
+
+    <div class="generator-cta">
+      <button class="generate-btn" id="generateBtn" onclick="handleGenerate()">
+        ⚡ GENERATE MY MEAL PREP
+      </button>
+      <span class="label" style="color:var(--text-muted)">Randomised from 12 curated recipes</span>
+    </div>
+  </div>
+</div>
+
+<!-- Plan Output -->
+<div class="plan-output" id="planOutput">
+  <div class="container">
+
+    <!-- Plan stats bar -->
+    <div class="plan-header-row">
+      <div>
+        <p class="label" style="margin-bottom:8px">YOUR PREP PLAN</p>
+        <h2 class="display-sm" id="planTitle">4-Day Meal Prep</h2>
+      </div>
+      <div class="flex gap-12">
+        <button class="btn btn-outline" onclick="handleGenerate()">🔄 Regenerate</button>
+        <a href="shopping-list.html" class="btn btn-primary" id="goShoppingBtn">🛒 Shopping List</a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div id="planStats"></div>
+
+    <div style="display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start" id="planGrid">
+      <!-- Left: meals -->
+      <div id="planMeals"></div>
+
+      <!-- Right: workflow + macros -->
+      <div>
+        <!-- Macro Calculator -->
+        <div class="macro-calc mb-24" id="macros" style="margin-bottom:24px">
+          <p class="label" style="margin-bottom:16px">📊 Athlete Macro Calculator</p>
+          <form id="macroCalcForm">
+            <div class="form-group">
+              <label class="form-label" for="bodyWeight">Body Weight (kg)</label>
+              <input type="number" id="bodyWeight" class="form-input" placeholder="e.g. 80" min="40" max="200" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="trainingIntensity">Training Intensity</label>
+              <select id="trainingIntensity" class="form-select">
+                <option value="light">Light (1–3x / week)</option>
+                <option value="moderate" selected>Moderate (3–5x / week)</option>
+                <option value="heavy">Heavy (5–7x / week)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fitnessGoal">Goal</label>
+              <select id="fitnessGoal" class="form-select">
+                <option value="cut">Cut — Fat Loss</option>
+                <option value="maintain" selected>Maintain</option>
+                <option value="bulk">Bulk — Muscle Gain</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Calculate Targets →</button>
+          </form>
+          <div id="macroResults" class="results-box hidden">
+            <p class="label" style="margin-bottom:12px">Daily Macro Targets</p>
+            <div class="results-grid">
+              <div class="result-item"><div class="result-value" id="r-calories">—</div><div class="result-label">Calories</div></div>
+              <div class="result-item"><div class="result-value" id="r-protein">—</div><div class="result-label">Protein</div></div>
+              <div class="result-item"><div class="result-value" id="r-carbs">—</div><div class="result-label">Carbs</div></div>
+              <div class="result-item"><div class="result-value" id="r-fat">—</div><div class="result-label">Fat</div></div>
+            </div>
+            <div style="margin-top:14px">
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:5px">Protein</div>
+              <div class="progress-bar"><div class="progress-fill" id="prog-protein" style="background:var(--red);width:0"></div></div>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin:8px 0 5px">Carbs</div>
+              <div class="progress-bar"><div class="progress-fill" id="prog-carbs" style="background:var(--blue);width:0"></div></div>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin:8px 0 5px">Fat</div>
+              <div class="progress-bar"><div class="progress-fill" id="prog-fat" style="background:var(--orange);width:0"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Batch Cooking Workflow -->
+        <div class="workflow" id="workflowBox">
+          <div class="workflow-title">
+            ⚡ Batch Cooking Workflow
+          </div>
+          <div class="workflow-steps" id="workflowSteps">
+            <p class="text-muted" style="font-size:0.85rem">Generate a plan to see your cooking workflow.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Initial state (before generating) -->
+<div id="preGenerateState" style="padding:48px 0;border-top:1px solid var(--border)">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
+      <div>
+        <p class="label" style="margin-bottom:16px">How It Works</p>
+        <div class="steps-list">
+          <div class="step-item fade-in-1">
+            <div class="step-num">01</div>
+            <div class="step-text"><strong>Select your prep days</strong> — Choose 3, 4, 5, or 7 days. All ingredient quantities scale automatically to match.</div>
+          </div>
+          <div class="step-item fade-in-2">
+            <div class="step-num">02</div>
+            <div class="step-text"><strong>Generate your plan</strong> — One click randomly selects breakfast, lunch, and dinner from the curated recipe database.</div>
+          </div>
+          <div class="step-item fade-in-3">
+            <div class="step-num">03</div>
+            <div class="step-text"><strong>Follow the workflow</strong> — The batch cooking workflow tells you exactly what to cook in what order to do everything in one session.</div>
+          </div>
+          <div class="step-item fade-in-4">
+            <div class="step-num">04</div>
+            <div class="step-text"><strong>Get your shopping list</strong> — All ingredients from all three meals combined into one organised grocery list.</div>
+          </div>
+        </div>
+      </div>
+      <div class="macro-calc" id="macrosStatic">
+        <p class="label" style="margin-bottom:16px">📊 Athlete Macro Calculator</p>
+        <form id="macroCalcFormStatic">
+          <div class="form-group">
+            <label class="form-label" for="bodyWeightS">Body Weight (kg)</label>
+            <input type="number" id="bodyWeightS" class="form-input" placeholder="e.g. 80" min="40" max="200" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="trainingIntensityS">Training Intensity</label>
+            <select id="trainingIntensityS" class="form-select">
+              <option value="light">Light (1–3x / week)</option>
+              <option value="moderate" selected>Moderate (3–5x / week)</option>
+              <option value="heavy">Heavy (5–7x / week)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fitnessGoalS">Goal</label>
+            <select id="fitnessGoalS" class="form-select">
+              <option value="cut">Cut — Fat Loss</option>
+              <option value="maintain" selected>Maintain</option>
+              <option value="bulk">Bulk — Muscle Gain</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Calculate My Targets →</button>
+        </form>
+        <div id="macroResultsStatic" class="results-box hidden">
+          <p class="label" style="margin-bottom:12px">Your Daily Targets</p>
+          <div class="results-grid">
+            <div class="result-item"><div class="result-value" id="rs-calories">—</div><div class="result-label">Calories</div></div>
+            <div class="result-item"><div class="result-value" id="rs-protein">—</div><div class="result-label">Protein</div></div>
+            <div class="result-item"><div class="result-value" id="rs-carbs">—</div><div class="result-label">Carbs</div></div>
+            <div class="result-item"><div class="result-value" id="rs-fat">—</div><div class="result-label">Fat</div></div>
+          </div>
+          <div style="margin-top:14px">
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:5px">Protein</div>
+            <div class="progress-bar"><div class="progress-fill" id="progs-protein" style="background:var(--red);width:0"></div></div>
+            <div style="font-size:0.78rem;color:var(--text-muted);margin:8px 0 5px">Carbs</div>
+            <div class="progress-bar"><div class="progress-fill" id="progs-carbs" style="background:var(--blue);width:0"></div></div>
+            <div style="font-size:0.78rem;color:var(--text-muted);margin:8px 0 5px">Fat</div>
+            <div class="progress-bar"><div class="progress-fill" id="progs-fat" style="background:var(--orange);width:0"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recipe Modal -->
+<div class="modal-overlay" id="recipeModal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-emoji">🍽️</div>
+        <div class="flex gap-8 mb-8" style="flex-wrap:wrap">
+          <div class="modal-tags flex gap-8" style="flex-wrap:wrap"></div>
+        </div>
+        <h2 class="display-sm modal-title">Recipe</h2>
+        <p class="text-secondary mt-8 modal-description" style="font-size:0.9rem"></p>
+        <p class="label mt-8 modal-serving-info" style="color:var(--accent)"></p>
+      </div>
+      <button class="modal-close" onclick="closeRecipeModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-macros"></div>
+      <div class="divider"></div>
+      <h3 style="font-family:var(--font-display);font-size:1rem;margin-bottom:16px;letter-spacing:0.06em;color:var(--text-secondary)">INGREDIENTS</h3>
+      <div class="ingredients-grid modal-ingredients"></div>
+      <div class="divider"></div>
+      <h3 style="font-family:var(--font-display);font-size:1rem;margin-bottom:16px;letter-spacing:0.06em;color:var(--text-secondary)">METHOD</h3>
+      <div class="steps-list modal-steps"></div>
+      <div class="divider"></div>
+      <h3 style="font-family:var(--font-display);font-size:1rem;margin-bottom:16px;letter-spacing:0.06em;color:var(--text-secondary)">STORAGE & REHEAT</h3>
+      <div class="steps-list modal-storage"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span class="toast-icon">⭐</span>
+  <span class="toast-message">Plan generated!</span>
+</div>
+
+<script src="app.js"></script>
+<script>
+  let selectedDays = 4;
+  let currentPlan = null;
+
+  // Days selector
+  document.querySelectorAll('.day-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedDays = parseInt(btn.dataset.days);
+      document.getElementById('planTitle').textContent = `${selectedDays}-Day Meal Prep Plan`;
+      if (currentPlan) {
+        currentPlan.days = selectedDays;
+        renderPlan(currentPlan);
+      }
+    });
+  });
+
+  function handleGenerate() {
+    const btn = document.getElementById('generateBtn');
+    btn.textContent = '⏳ GENERATING...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      currentPlan = generateWeeklyPlan(selectedDays);
+      renderPlan(currentPlan);
+      btn.textContent = '⚡ GENERATE MY MEAL PREP';
+      btn.disabled = false;
+
+      // Show plan
+      document.getElementById('planOutput').classList.add('visible');
+      document.getElementById('preGenerateState').style.display = 'none';
+
+      // Save plan to localStorage for shopping list
+      localStorage.setItem('preper_current_plan', JSON.stringify({
+        breakfastId: currentPlan.breakfast.id,
+        lunchId: currentPlan.lunch.id,
+        dinnerId: currentPlan.dinner.id,
+        days: selectedDays
+      }));
+
+      showToast('⚡ New meal plan generated!');
+      document.getElementById('planOutput').scrollIntoView({ behavior: 'smooth' });
+    }, 600);
+  }
+
+  function renderPlan(plan) {
+    const { mealSlotsHTML, statsHTML, workflowSteps } = renderWeeklyPlan(plan);
+
+    document.getElementById('planTitle').textContent = `${plan.days}-Day Meal Prep Plan`;
+    document.getElementById('planStats').innerHTML = statsHTML;
+    document.getElementById('planMeals').innerHTML = mealSlotsHTML;
+
+    // Render workflow
+    document.getElementById('workflowSteps').innerHTML = workflowSteps.map((step, i) => `
+      <div class="workflow-step fade-in" style="animation-delay:${i * 0.06}s">
+        <div class="workflow-step-num">${String(i + 1).padStart(2, '0')}</div>
+        <div class="workflow-step-content">
+          <div class="workflow-step-title">${step.title}</div>
+          <div class="workflow-step-desc">${step.desc}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Static macro calc (pre-generate state)
+  document.getElementById('macroCalcFormStatic').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const weight = parseFloat(document.getElementById('bodyWeightS').value);
+    const intensity = document.getElementById('trainingIntensityS').value;
+    const goal = document.getElementById('fitnessGoalS').value;
+    if (!weight || weight < 40 || weight > 200) { showToast('Enter valid weight (40–200kg)'); return; }
+
+    const macros = calculateMacros(weight, intensity, goal);
+    const results = document.getElementById('macroResultsStatic');
+    results.classList.remove('hidden');
+    document.getElementById('rs-calories').textContent = macros.calories;
+    document.getElementById('rs-protein').textContent = macros.protein + 'g';
+    document.getElementById('rs-carbs').textContent = macros.carbs + 'g';
+    document.getElementById('rs-fat').textContent = macros.fat + 'g';
+    const total = macros.protein * 4 + macros.carbs * 4 + macros.fat * 9;
+    document.getElementById('progs-protein').style.width = Math.round(macros.protein * 4 / total * 100) + '%';
+    document.getElementById('progs-carbs').style.width = Math.round(macros.carbs * 4 / total * 100) + '%';
+    document.getElementById('progs-fat').style.width = Math.round(macros.fat * 9 / total * 100) + '%';
+  });
+
+  // Expose macro calculator function globally (app.js also calls this)
+  function calculateMacros(weightKg, intensity, goal) {
+    let multiplier = 1.55;
+    if (intensity === 'light') multiplier = 1.375;
+    if (intensity === 'heavy') multiplier = 1.725;
+    const bmr = 10 * weightKg + 625;
+    const tdee = Math.round(bmr * multiplier);
+    let calories = tdee;
+    if (goal === 'cut') calories = Math.round(tdee * 0.82);
+    if (goal === 'bulk') calories = Math.round(tdee * 1.12);
+    const protein = Math.round(weightKg * 2.2);
+    const fat = Math.round((calories * 0.25) / 9);
+    const carbs = Math.round((calories - protein * 4 - fat * 9) / 4);
+    return { calories, protein, carbs, fat };
+  }
+
+  // In-plan macro calc
+  document.getElementById('macroCalcForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const weight = parseFloat(document.getElementById('bodyWeight').value);
+    const intensity = document.getElementById('trainingIntensity').value;
+    const goal = document.getElementById('fitnessGoal').value;
+    if (!weight || weight < 40 || weight > 200) { showToast('Enter valid weight (40–200kg)'); return; }
+    const macros = calculateMacros(weight, intensity, goal);
+    const results = document.getElementById('macroResults');
+    results.classList.remove('hidden');
+    document.getElementById('r-calories').textContent = macros.calories;
+    document.getElementById('r-protein').textContent = macros.protein + 'g';
+    document.getElementById('r-carbs').textContent = macros.carbs + 'g';
+    document.getElementById('r-fat').textContent = macros.fat + 'g';
+    const total = macros.protein * 4 + macros.carbs * 4 + macros.fat * 9;
+    document.getElementById('prog-protein').style.width = Math.round(macros.protein * 4 / total * 100) + '%';
+    document.getElementById('prog-carbs').style.width = Math.round(macros.carbs * 4 / total * 100) + '%';
+    document.getElementById('prog-fat').style.width = Math.round(macros.fat * 9 / total * 100) + '%';
+  });
+
+  // Check if there's a plan in localStorage on load
+  document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('preper_current_plan');
+    if (saved) {
+      try {
+        const planData = JSON.parse(saved);
+        const breakfast = getAllRecipes().find(r => r.id === planData.breakfastId);
+        const lunch = getAllRecipes().find(r => r.id === planData.lunchId);
+        const dinner = getAllRecipes().find(r => r.id === planData.dinnerId);
+        if (breakfast && lunch && dinner) {
+          currentPlan = { breakfast, lunch, dinner, days: planData.days || 4 };
+          selectedDays = currentPlan.days;
+          document.querySelectorAll('.day-btn').forEach(b => {
+            b.classList.toggle('active', parseInt(b.dataset.days) === selectedDays);
+          });
+          renderPlan(currentPlan);
+          document.getElementById('planOutput').classList.add('visible');
+          document.getElementById('preGenerateState').style.display = 'none';
+        }
+      } catch (e) { /* ignore */ }
+    }
+  });
+</script>
+</body>
+</html>
