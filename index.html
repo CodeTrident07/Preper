@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preper — By Praanav | Elite Meal Prep for Athletes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────────────────────── -->
+<nav class="nav">
+  <span class="nav-brand">PREPER</span>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="breakfast.html" class="nav-link">Breakfast</a>
+    <a href="lunch.html" class="nav-link">Lunch</a>
+    <a href="dinner.html" class="nav-link">Dinner</a>
+    <a href="generator.html" class="nav-link">Generator</a>
+    <a href="shopping-list.html" class="nav-link">Shopping List</a>
+    <a href="saved.html" class="nav-link">Saved</a>
+  </div>
+  <button class="nav-diet-badge" id="dietBadge" onclick="openDietModal()">🌱 Set Diet</button>
+</nav>
+
+<!-- ─── DIET BANNER ───────────────────────────────────────────── -->
+<div class="diet-banner" id="diet-banner">
+  <span>👋 Set your dietary preference to get personalised recipes →</span>
+  <a href="#" onclick="openDietModal(); return false;">Set Preference</a>
+  <button class="diet-banner-close" onclick="document.getElementById('diet-banner').style.display='none'">×</button>
+</div>
+
+<main>
+  <!-- ─── HERO ─────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container">
+      <p class="hero-eyebrow">Meal Prep System — By Praanav</p>
+      <h1 class="hero-title">PREP<em>ER</em></h1>
+      <p class="hero-sub">Plan your meals, hit your macros, stay inside your budget. Built for students who train seriously.</p>
+      <div class="hero-actions">
+        <a href="generator.html" class="btn btn-primary btn-lg">⚡ Generate My Week</a>
+        <a href="breakfast.html" class="btn btn-outline btn-lg">Browse Recipes</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STATS ─────────────────────────────────────────────────── -->
+  <div class="container">
+    <div class="stats-grid stagger">
+      <div class="stat-card">
+        <div class="stat-value">28+</div>
+        <div class="stat-label">High-Protein Recipes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">6</div>
+        <div class="stat-label">Dietary Modes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">90m</div>
+        <div class="stat-label">Full Week in 90 Min</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">50g</div>
+        <div class="stat-label">Avg Protein / Meal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── MEAL PREVIEW STRIP ────────────────────────────────────── -->
+  <div class="container">
+    <div class="section-header" style="padding-top:48px">
+      <p class="section-eyebrow">Recipe Library</p>
+      <h2 class="section-title">This Week's Picks</h2>
+    </div>
+    <div class="meal-preview-strip" id="previewStrip"></div>
+  </div>
+
+  <!-- ─── HOW IT WORKS ──────────────────────────────────────────── -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">How It Works</p>
+        <h2 class="section-title">Four Steps to a Perfect Week</h2>
+      </div>
+      <div class="steps-row stagger">
+        <div class="step-item">
+          <div class="step-num">01</div>
+          <div class="step-title">Set Your Diet</div>
+          <div class="step-desc">Tell us if you're vegan, halal, Hindu non-veg, or anything else. We filter recipes perfectly.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">02</div>
+          <div class="step-title">Set Your Macros</div>
+          <div class="step-desc">Input your weight, goal, and training intensity — or enter your own targets manually.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">03</div>
+          <div class="step-title">Generate Your Plan</div>
+          <div class="step-desc">One click picks your breakfast, lunch, and dinner and scales ingredients to your prep days.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">04</div>
+          <div class="step-title">Cook & Conquer</div>
+          <div class="step-desc">Follow the step-by-step batch workflow. Groceries auto-organised. Whole week done in 90 min.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FEATURES ──────────────────────────────────────────────── -->
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">Features</p>
+      <h2 class="section-title">Built for Real <em style="font-style:normal; color:var(--accent)">Athletes</em></h2>
+    </div>
+    <div class="features-grid stagger">
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title">Diet-Filtered Recipes</div>
+        <div class="feature-desc">Vegan, Jain, Hindu Veg, Hindu Non-Veg, Halal, and Omnivore modes. Every recipe respects your choices.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚗️</div>
+        <div class="feature-title">Macro Calculator</div>
+        <div class="feature-desc">Input bodyweight, training intensity, and goal. Or override with your own calorie and macro targets.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📐</div>
+        <div class="feature-title">Auto Scaling</div>
+        <div class="feature-desc">Choose 3, 4, 5, or 7 days. Every ingredient quantity scales automatically. No maths needed.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛒</div>
+        <div class="feature-title">Smart Shopping List</div>
+        <div class="feature-desc">Ingredients from all meals combined and organised by Proteins, Carbs, Veg, Sauces, and Seasonings.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧑‍🍳</div>
+        <div class="feature-title">Batch Workflow</div>
+        <div class="feature-desc">A step-by-step cooking sequence to prep everything in one session — efficiently, with zero chaos.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">♥</div>
+        <div class="feature-title">Save Favourite Meals</div>
+        <div class="feature-desc">Heart the meals you love. They're saved locally and available any time without re-discovering them.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CTA ───────────────────────────────────────────────────── -->
+  <div class="container" style="text-align:center; padding: 80px 0;">
+    <p class="section-eyebrow">Ready?</p>
+    <h2 class="section-title" style="margin-bottom: 24px;">Start Your First Plan</h2>
+    <p class="text-muted" style="font-size:16px; margin-bottom:40px; max-width:400px; margin-left:auto; margin-right:auto;">Takes 2 minutes to set up. Saves you hours every week.</p>
+    <a href="generator.html" class="btn btn-primary btn-lg">⚡ Generate My Weekly Plan</a>
+  </div>
+</main>
+
+<!-- ─── FOOTER ─────────────────────────────────────────────────── -->
+<footer>
+  <strong>PREPER</strong> — By Praanav · Elite Meal Prep System · Built with ❤️ for athletes & busy people
+</footer>
+
+<!-- ─── DIET MODAL ──────────────────────────────────────────────── -->
+<div class="modal-overlay" id="dietModal">
+  <div class="modal">
+    <h2 class="modal-title">Your Diet</h2>
+    <p class="modal-sub">Choose your dietary preference. We'll filter every recipe to match your lifestyle.</p>
+    <div class="diet-grid" id="dietGrid"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeDietModal()">Cancel</button>
+      <button class="btn btn-primary" id="saveDietBtn" onclick="confirmDiet()">Save Preference</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+<script>
+
+
+var { RECIPES, DIETARY_PREFS, getSavedDiet, saveDiet, Storage } = window.PreperApp;
+
+// ─── DIET MODAL ───────────────────────────────────────────────
+window.tempDiet = null;
+
+window.openDietModal = function() {
+  tempDiet = getSavedDiet();
+  renderDietGrid();
+  document.getElementById('dietModal').classList.add('open');
+}
+window.closeDietModal = function() {
+  document.getElementById('dietModal').classList.remove('open');
+}
+window.renderDietGrid = function() {
+  const grid = document.getElementById('dietGrid');
+  const descriptions = {
+    vegan: "No animal products whatsoever",
+    jain: "No meat, eggs, or root vegetables",
+    hindu_veg: "No meat, fish, or eggs (dairy ok)",
+    hindu_nonveg: "No beef or pork — all other meats ok",
+    non_veg: "All meats including beef — no restrictions",
+    halal: "No pork, no alcohol — halal meats only",
+  };
+  grid.innerHTML = Object.entries(DIETARY_PREFS).map(([key, pref]) => `
+    <div class="diet-card ${tempDiet === key ? 'selected' : ''}" onclick="selectDiet('${key}', this)">
+      <div class="diet-card-icon">${pref.icon}</div>
+      <div class="diet-card-name">${pref.label}</div>
+      <div class="diet-card-desc">${descriptions[key]}</div>
+    </div>
+  `).join('');
+}
+window.selectDiet = function(key, el) {
+  tempDiet = key;
+  document.querySelectorAll('.diet-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+window.confirmDiet = function() {
+  if (!tempDiet) { showToast('Please select a preference', 'error'); return; }
+  saveDiet(tempDiet);
+  updateDietBadge();
+  closeDietModal();
+  document.getElementById('diet-banner').style.display = 'none';
+  showToast(`✓ Diet set to ${DIETARY_PREFS[tempDiet].label}`, 'success');
+}
+window.updateDietBadge = function() {
+  const diet = getSavedDiet();
+  const badge = document.getElementById('dietBadge');
+  if (diet) {
+    badge.textContent = `${DIETARY_PREFS[diet].icon} ${DIETARY_PREFS[diet].label}`;
+  }
+}
+
+// ─── MEAL PREVIEW STRIP ───────────────────────────────────────
+window.renderPreviewStrip = function() {
+  const all = [...RECIPES.breakfast, ...RECIPES.lunch, ...RECIPES.dinner];
+  const picks = all.sort(() => Math.random() - 0.5).slice(0, 12);
+  document.getElementById('previewStrip').innerHTML = picks.map(r => `
+    <div class="meal-preview-card" onclick="location.href='${r.id.startsWith('b') ? 'breakfast' : r.id.startsWith('l') ? 'lunch' : 'dinner'}.html'">
+      <div class="meal-preview-hero" style="background:${r.gradient}">${r.emoji}</div>
+      <div class="meal-preview-body">
+        <div class="meal-preview-name">${r.name}</div>
+        <div class="meal-preview-meta">${r.protein}g protein · ${r.calories} kcal</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── TOAST ────────────────────────────────────────────────────
+window.showToast = function(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  updateDietBadge();
+  renderPreviewStrip();
+  // Close modal on backdrop click
+  document.getElementById('dietModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeDietModal();
+  });
+});
+
+
+</script>
+</body>
+</html>
