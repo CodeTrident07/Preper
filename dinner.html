@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dinner &mdash; Preper</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">PREPER</a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link" data-page="index.html">Home</a>
+    <a href="breakfast.html" class="nav-link" data-page="breakfast.html">Breakfast</a>
+    <a href="lunch.html" class="nav-link" data-page="lunch.html">Lunch</a>
+    <a href="dinner.html" class="nav-link" data-page="dinner.html">Dinner</a>
+    <a href="generator.html" class="nav-link" data-page="generator.html">Generator</a>
+    <a href="shopping-list.html" class="nav-link" data-page="shopping-list.html">Shopping</a>
+    <a href="saved.html" class="nav-link" data-page="saved.html">Saved</a>
+  </div>
+  <button class="nav-diet-badge" id="dietBadge" onclick="openDietModal()">Set Diet</button>
+</nav>
+
+<div class="diet-banner" id="diet-banner">
+  <span>Set your diet so recipes actually match what you eat</span>
+  <a href="#" onclick="openDietModal(); return false;">Set it now</a>
+  <button class="diet-banner-close" onclick="this.parentElement.style.display='none'">&times;</button>
+</div>
+
+<main>
+  <div class="container">
+    <div class="page-header">
+      <div class="page-header-inner">
+        <div>
+          <p class="section-eyebrow">Evening meals</p>
+          <h1 class="section-title">&#127762; Dinner</h1>
+          <p class="section-desc">Full evening meals built for batch cooking. Big flavours, high protein, ready to reheat.</p>
+        </div>
+        <div style="margin-left:auto; display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap">
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Scale to</label>
+            <select class="form-select" id="daysSelect" onchange="renderRecipes()" style="width:110px">
+              <option value="1">1 day</option>
+              <option value="3">3 days</option>
+              <option value="4">4 days</option>
+              <option value="5" selected>5 days</option>
+              <option value="7">7 days</option>
+            </select>
+          </div>
+          <div id="recipeCount" style="font-family:var(--font-mono); font-size:11px; color:var(--text-3); padding-bottom:9px"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <span class="filter-label">Filter</span>
+      <button class="filter-chip active" onclick="setFilter('all',this)">All</button>
+      <button class="filter-chip" onclick="setFilter('quick',this)">&#9889; Under 10 min</button>
+      <button class="filter-chip" onclick="setFilter('no_cook',this)">&#10052; No cook</button>
+      <button class="filter-chip" onclick="setFilter('high_protein',this)">&#128170; 40g+ protein</button>
+    </div>
+
+    <div class="recipe-grid stagger" id="recipeGrid"></div>
+  </div>
+</main>
+
+<footer>
+  <strong>PREPER</strong> &mdash; By Praanav &middot; 248 recipes &middot; 6 dietary modes &middot; zero BS
+</footer>
+
+<div class="modal-overlay" id="dietModal">
+  <div class="modal">
+    <h2 class="modal-title">Your Diet</h2>
+    <p class="modal-sub">Every recipe in Preper is tagged. Pick yours and we filter the rest.</p>
+    <div class="diet-grid" id="dietGrid"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeDietModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmDiet()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+<script>
+const { RECIPES, DIETARY_PREFS, getSavedDiet, saveDiet, renderRecipeCard, toggleSave, rateRecipe } = window.PreperApp;
+window.toggleSave = toggleSave;
+window.rateRecipe = rateRecipe;
+
+const CATEGORY = 'dinner';
+let activeFilter = 'all';
+
+const DIET_DESCS = {
+  vegan:'No animal products at all', jain:'No meat, eggs, or root veg',
+  hindu_veg:'No meat or eggs, dairy fine', hindu_nonveg:'No beef or pork',
+  non_veg:'Everything', halal:'Halal meat only, no pork',
+};
+
+window.setFilter = function(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderRecipes();
+};
+
+window.renderRecipes = function() {
+  const diet = getSavedDiet() || 'non_veg';
+  const days = parseInt(document.getElementById('daysSelect').value);
+  let recipes = RECIPES[CATEGORY].filter(r => r.tags.includes(diet));
+
+  if (activeFilter === 'quick')       recipes = recipes.filter(r => r.prepTime + r.cookTime <= 10);
+  if (activeFilter === 'no_cook')     recipes = recipes.filter(r => r.cookTime === 0);
+  if (activeFilter === 'high_protein')recipes = recipes.filter(r => r.protein >= 40);
+
+  const grid = document.getElementById('recipeGrid');
+  const count = document.getElementById('recipeCount');
+
+  count.textContent = recipes.length ? `${recipes.length} recipes` : '';
+
+  if (!recipes.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-state-icon">&#128517;</div>
+      <h2>Nothing matched</h2>
+      <p>Try a different filter, or change your diet preference.</p>
+      <button class="btn btn-primary" onclick="openDietModal()">Change Diet</button>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = recipes.map(r => renderRecipeCard(r, days)).join('');
+};
+
+window.tempDiet = null;
+
+window.openDietModal = function() {
+  tempDiet = getSavedDiet();
+  document.getElementById('dietGrid').innerHTML = Object.entries(DIETARY_PREFS).map(([k,p]) => `
+    <div class="diet-card ${tempDiet===k?'selected':''}" onclick="selectDiet('${k}',this)">
+      <div class="diet-card-icon">${p.icon}</div>
+      <div class="diet-card-name">${p.label}</div>
+      <div class="diet-card-desc">${DIET_DESCS[k]}</div>
+    </div>`).join('');
+  document.getElementById('dietModal').classList.add('open');
+};
+window.closeDietModal = function() { document.getElementById('dietModal').classList.remove('open'); };
+window.selectDiet = function(k, el) {
+  tempDiet = k;
+  document.querySelectorAll('.diet-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+};
+window.confirmDiet = function() {
+  if (!tempDiet) return;
+  saveDiet(tempDiet);
+  updateDietBadge();
+  closeDietModal();
+  document.getElementById('diet-banner').style.display = 'none';
+  renderRecipes();
+  showToast(`${DIETARY_PREFS[tempDiet].icon} ${DIETARY_PREFS[tempDiet].label} set`, 'success');
+};
+window.updateDietBadge = function() {
+  const diet = getSavedDiet();
+  const el = document.getElementById('dietBadge');
+  if (diet && DIETARY_PREFS[diet]) el.textContent = `${DIETARY_PREFS[diet].icon} ${DIETARY_PREFS[diet].label}`;
+};
+window.showToast = function(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateDietBadge();
+  renderRecipes();
+  const page = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-link[data-page]').forEach(a => {
+    if (a.dataset.page === page) a.classList.add('active');
+  });
+  document.getElementById('dietModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeDietModal();
+  });
+  const diet = getSavedDiet();
+  if (diet) document.getElementById('diet-banner').style.display = 'none';
+});
+</script>
+</body>
+</html>
